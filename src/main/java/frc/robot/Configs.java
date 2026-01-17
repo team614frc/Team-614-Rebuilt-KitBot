@@ -20,8 +20,8 @@ public final class Configs {
 
     static {
       LAUNCHER_CONFIG
-          .idleMode(IdleMode.kBrake)
-          .inverted(true)
+          .idleMode(IdleMode.kCoast)
+          .inverted(false)
           .smartCurrentLimit((int) Constants.FuelConstants.LAUNCHER_MOTOR_CURRENT_LIMIT.in(Amp));
     }
   }

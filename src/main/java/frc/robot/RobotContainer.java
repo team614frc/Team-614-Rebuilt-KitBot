@@ -12,7 +12,9 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -78,12 +80,23 @@ public class RobotContainer {
         ballSubsystem
             .spinUpCommand()
             .withTimeout(SPIN_UP_SECONDS)
-            .andThen(ballSubsystem.launchCommand()));
+            .andThen(ballSubsystem.launchCommand())
+            .withTimeout(5.85)
+            .finallyDo(() -> ballSubsystem.stop()));
+    NamedCommands.registerCommand(
+        "4Launch",
+        ballSubsystem
+            .spinUpCommand()
+            .withTimeout(SPIN_UP_SECONDS)
+            .andThen(ballSubsystem.launchCommand())
+            .withTimeout(4)
+            .finallyDo(() -> ballSubsystem.stop()));
     NamedCommands.registerCommand("Stop", ballSubsystem.stopCommand());
     NamedCommands.registerCommand("Intake", ballSubsystem.intakeCommand());
 
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   /**
@@ -96,7 +109,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
+    Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
     // While the left bumper on driver controller is held, intake Fuel
     driverXbox
         .leftBumper()
