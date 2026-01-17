@@ -57,7 +57,7 @@ public class RobotContainer {
               () -> -driverXbox.getLeftX())
           .withControllerRotationAxis(() -> -driverXbox.getRightX())
           .deadband(OperatorConstants.DEADBAND)
-          .scaleTranslation(0.85)
+          .scaleTranslation(0.95)
           .allianceRelativeControl(true);
 
   SwerveInputStream driveAngularVelocityKeyboard =
@@ -67,7 +67,7 @@ public class RobotContainer {
               () -> -driverXbox.getLeftX())
           .withControllerRotationAxis(() -> driverXbox.getRawAxis(2))
           .deadband(OperatorConstants.DEADBAND)
-          .scaleTranslation(0.85)
+          .scaleTranslation(0.95)
           .allianceRelativeControl(true);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -125,6 +125,15 @@ public class RobotContainer {
                 .spinUpCommand()
                 .withTimeout(SPIN_UP_SECONDS)
                 .andThen(ballSubsystem.launchCommand())
+                .finallyDo(() -> ballSubsystem.stop()));
+
+    driverXbox
+        .rightTrigger()
+        .whileTrue(
+            ballSubsystem
+                .spinUpFarCommand()
+                .withTimeout(SPIN_UP_SECONDS)
+                .andThen(ballSubsystem.launchFarCommand())
                 .finallyDo(() -> ballSubsystem.stop()));
     // While the A button is held on the driver controller, eject fuel back out
     // the intake

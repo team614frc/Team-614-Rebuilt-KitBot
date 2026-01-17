@@ -37,9 +37,10 @@ public final class Constants {
     public static final double INTAKING_FEEDER_VOLTAGE = -12;
     public static final double INTAKING_INTAKE_VOLTAGE = 10;
     public static final double LAUNCHING_FEEDER_VOLTAGE = 12; // 9
-    public static final double LAUNCHING_LAUNCHER_VOLTAGE = 5.8; // 10.6
-    public static final double SPIN_UP_FEEDER_VOLTAGE = -6; // -6
-    public static final double SPIN_UP_SECONDS = 0.45;
+    public static final double LAUNCHING_LAUNCHER_VOLTAGE = 6.05; // 10.6
+    public static final double LAUNCHING_FARLAUNCHER_VOLTAGE = 12; // 10.6
+    public static final double SPIN_UP_FEEDER_VOLTAGE = -7; // -6
+    public static final double SPIN_UP_SECONDS = 0.3;
   }
 
   public static final class OperatorConstants {

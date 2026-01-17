@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "forward"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Launch"

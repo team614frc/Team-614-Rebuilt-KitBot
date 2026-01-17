@@ -73,6 +73,13 @@ public class CANFuelSubsystem extends SubsystemBase {
         SmartDashboard.getNumber("Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE));
   }
 
+  public void launchFar() {
+    feederRoller.setVoltage(
+        SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
+    intakeLauncherRoller.setVoltage(
+        SmartDashboard.getNumber("Launching launcher roller value", LAUNCHING_FARLAUNCHER_VOLTAGE));
+  }
+
   // A method to stop the rollers
   public void stop() {
     feederRoller.set(0);
@@ -88,16 +95,31 @@ public class CANFuelSubsystem extends SubsystemBase {
         SmartDashboard.getNumber("Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE));
   }
 
+  public void spinUpFar() {
+    feederRoller.setVoltage(
+        SmartDashboard.getNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE));
+    intakeLauncherRoller.setVoltage(
+        SmartDashboard.getNumber("Launching launcher roller value", LAUNCHING_FARLAUNCHER_VOLTAGE));
+  }
+
   // A command factory to turn the spinUp method into a command that requires this
   // subsystem
   public Command spinUpCommand() {
     return this.run(() -> spinUp());
   }
 
+  public Command spinUpFarCommand() {
+    return this.run(() -> spinUpFar());
+  }
+
   // A command factory to turn the launch method into a command that requires this
   // subsystem
   public Command launchCommand() {
     return this.run(() -> launch());
+  }
+
+  public Command launchFarCommand() {
+    return this.run(() -> launchFar());
   }
 
   public Command stopCommand() {

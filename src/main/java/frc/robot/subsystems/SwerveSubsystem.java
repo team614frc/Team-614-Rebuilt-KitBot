@@ -58,7 +58,7 @@ public class SwerveSubsystem extends SubsystemBase {
         true, true,
         0.1); // Correct for skew that gets worse as angular velocity increases. Start with a
     // coefficient of 0.1.
-    swerveDrive.setChassisDiscretization(true, 0.05);
+    swerveDrive.setChassisDiscretization(true, 0.04);
     setupPathPlanner();
   }
 
