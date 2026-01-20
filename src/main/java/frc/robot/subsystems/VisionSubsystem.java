@@ -3,7 +3,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -174,24 +173,25 @@ public class VisionSubsystem extends SubsystemBase {
     // Process latest vision results
 
     for (PhotonPipelineResult result : results) {
-      if (result.hasTargets()) {
-        Optional<EstimatedRobotPose> maybeEst = poseEstimator.update(result);
-        targetYawDeg = result.getBestTarget().getYaw();
-        maybeEst.ifPresent(
-            est -> {
-              Pose2d est2d = est.estimatedPose.toPose2d();
-              lastEstimatedPose = Optional.of(est2d);
-              lastEstimatedTimestamp = est.timestampSeconds;
-
-              SmartDashboard.putBoolean("Vision/HasPose", true);
-              SmartDashboard.putNumber("Vision/PoseX", est2d.getX());
-              SmartDashboard.putNumber("Vision/PoseY", est2d.getY());
-              SmartDashboard.putNumber("Vision/PoseRotDeg", est2d.getRotation().getDegrees());
-              SmartDashboard.putNumber("Vision/Timestamp", est.timestampSeconds);
-
-
-            });
+      if (!result.hasTargets()) {
+        continue;
       }
+      Optional<EstimatedRobotPose> maybeEst = poseEstimator.update(result);
+      targetYawDeg = result.getBestTarget().getYaw();
+      maybeEst.ifPresent(
+          est -> {
+            Pose2d est2d = est.estimatedPose.toPose2d();
+            lastEstimatedPose = Optional.of(est2d);
+            lastEstimatedTimestamp = est.timestampSeconds;
+
+            SmartDashboard.putBoolean("Vision/HasPose", true);
+            SmartDashboard.putNumber("Vision/PoseX", est2d.getX());
+            SmartDashboard.putNumber("Vision/PoseY", est2d.getY());
+            SmartDashboard.putNumber("Vision/PoseRotDeg", est2d.getRotation().getDegrees());
+            SmartDashboard.putNumber("Vision/Timestamp", est.timestampSeconds);
+
+
+          });
     }
   }
 
@@ -203,26 +203,6 @@ public class VisionSubsystem extends SubsystemBase {
   // Returns the timestamp (seconds) of the last estimate, or 0.0 if none.
   public double getEstimatedPoseTimestamp() {
     return lastEstimatedPose.isPresent() ? lastEstimatedTimestamp : 0.0;
-  }
-
-  private Optional<AprilTag> getNearestAllowedTag(Pose2d robotPose) {
-    if (fieldLayout == null) return Optional.empty();
-
-    double closestDistance = Double.MAX_VALUE;
-    AprilTag closestTag = null;
-
-    for (AprilTag tag : fieldLayout.getTags()) {
-      if (!allowedTagIDs.contains(tag.ID)) continue;
-
-      double distance =
-          tag.pose.toPose2d().getTranslation().getDistance(robotPose.getTranslation());
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestTag = tag;
-      }
-    }
-
-    return Optional.ofNullable(closestTag);
   }
 
   public Command autoAlignCommand() {
