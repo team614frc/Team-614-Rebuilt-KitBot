@@ -189,7 +189,6 @@ public class VisionSubsystem extends SubsystemBase {
               SmartDashboard.putNumber("Vision/PoseRotDeg", est2d.getRotation().getDegrees());
               SmartDashboard.putNumber("Vision/Timestamp", est.timestampSeconds);
 
-              // integrate vision into odometry
 
             });
       }
