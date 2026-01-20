@@ -18,10 +18,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.AlignConstants;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -50,25 +48,7 @@ public class VisionSubsystem extends SubsystemBase {
   // State for alignment
   private boolean hasTarget = false;
   private double targetYawDeg = 0.0;
-  private double targetDistanceMeters = 0.0;
-
   private final SwerveSubsystem drivebase;
-
-  // Gains for alignment
-  private static final double TRANSLATION_KP = 2.0;
-  private static final double ROTATION_KP = 1.75;
-  private static final double MAX_LINEAR_SPEED_MPS = 2.65; // 1.65
-  private static final double MAX_ANGULAR_SPEED_RAD_PER_SEC = 3.5; // 3.15
-
-  private static final double TAG_STANDOFF_METERS = 0.4375; // .45
-  private static final double POSITION_TOLERANCE_METERS = 0.05;
-  private static final double ANGLE_TOLERANCE_DEGREES = 2.75; // 3
-  private static final int REQUIRED_STABLE_CYCLES = 5;
-
-  private int alignedStableCounter = 0;
-
-  private final Set<Integer> allowedTagIDs =
-      new HashSet<>(Set.of(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22));
 
   // Fields for PhotonPoseEstimator usage
   private final Transform3d robotToCamera;
@@ -189,8 +169,6 @@ public class VisionSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Vision/PoseY", est2d.getY());
             SmartDashboard.putNumber("Vision/PoseRotDeg", est2d.getRotation().getDegrees());
             SmartDashboard.putNumber("Vision/Timestamp", est.timestampSeconds);
-
-
           });
     }
   }
