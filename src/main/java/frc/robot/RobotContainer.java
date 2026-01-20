@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.CANFuelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
 
@@ -116,6 +117,9 @@ public class RobotContainer {
     driverXbox
         .a()
         .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.eject(), () -> ballSubsystem.stop()));
+
+    // While Right trigger is held, align with April Tag
+    driverXbox.rightTrigger().whileTrue(new VisionSubsystem(drivebase).autoAlignCommand());
   }
 
   /**
