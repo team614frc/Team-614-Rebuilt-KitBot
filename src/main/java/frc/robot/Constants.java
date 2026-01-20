@@ -8,6 +8,8 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Velocity;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -19,7 +21,7 @@ import edu.wpi.first.units.measure.Current;
  */
 public final class Constants {
   public static final class DrivebaseConstants {
-    public static final double MAX_SPEED = Units.feetToMeters(17.5);
+    public static final LinearVelocity MAX_SPEED = FeetPerSecond.of(17.5);
   }
 
   public static final class FuelConstants {
