@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 
 /**
@@ -48,5 +49,16 @@ public final class Constants {
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
     public static final double DEADBAND = 0.1;
+  }
+
+  public static final class AlignConstants {
+
+    public static final Angle ANGLE_TARGET_DEGREE = Degrees.mutable(10);
+    public static final double AIM_KP = 3.0; // unitless gain
+  }
+
+  public static final class Swerve {
+    public static final double kMaxLinearSpeed = 4.5; // meters per second
+    public static final double kMaxAngularSpeed = 10.0; // radians per second
   }
 }
