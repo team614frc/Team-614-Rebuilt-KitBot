@@ -6,6 +6,7 @@ package frc.robot;
 
 import static frc.robot.Constants.FuelConstants.*;
 import static frc.robot.Constants.OperatorConstants.*;
+import static frc.robot.subsystems.VisionSubsystem.MAX_LINEAR_SPEED_MPS;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -20,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.CANFuelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import java.io.File;
 import swervelib.SwerveInputStream;
 
@@ -34,6 +36,7 @@ public class RobotContainer {
   private final SwerveSubsystem drivebase =
       new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve"));
   private final CANFuelSubsystem ballSubsystem = new CANFuelSubsystem();
+  private final VisionSubsystem vision = new VisionSubsystem(drivebase);
 
   // The driver's controller
   private final CommandXboxController driverXbox =
@@ -135,11 +138,20 @@ public class RobotContainer {
                 .withTimeout(SPIN_UP_SECONDS)
                 .andThen(ballSubsystem.launchFarCommand())
                 .finallyDo(() -> ballSubsystem.stop()));
-    // While the A button is held on the driver controller, eject fuel back out
-    // the intake
+
     driverXbox
         .a()
-        .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.eject(), () -> ballSubsystem.stop()));
+        .whileTrue(
+            vision.rotateToAllianceTagWhileDriving(
+                () -> driverXbox.getLeftY() * MAX_LINEAR_SPEED_MPS,
+                () -> driverXbox.getLeftX() * MAX_LINEAR_SPEED_MPS));
+
+    // // While the A button is held on the driver controller, eject fuel back out
+    // // the intake
+    // driverXbox
+    //     .a()
+    //     .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.eject(), () ->
+    // ballSubsystem.stop()));
   }
 
   /**
