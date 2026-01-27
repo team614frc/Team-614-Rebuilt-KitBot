@@ -18,6 +18,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -73,6 +74,9 @@ public class VisionSubsystem extends SubsystemBase {
   private static final int REQUIRED_STABLE_CYCLES = 5;
   private static final double AGGRESSIVE_DISTANCE_METERS = 0.15;
   private static final double FAR_GAIN_MULTIPLIER = 1.8;
+
+  private double lastVisionFuseTime = 0.0;
+  private static final double MIN_VISION_FUSE_PERIOD = 0.06; // ~16 Hz
 
   private int alignedStableCounter = 0;
 
@@ -179,6 +183,33 @@ public class VisionSubsystem extends SubsystemBase {
     SmartDashboard.putData("Vision Field", visionSim.getDebugField());
   }
 
+  private boolean isVisionMeasurementTrusted(EstimatedRobotPose est, PhotonCamera cam) {
+
+    int tagCount = est.targetsUsed.size();
+
+    double avgDistance =
+        est.targetsUsed.stream()
+            .mapToDouble(t -> t.getBestCameraToTarget().getTranslation().getNorm())
+            .average()
+            .orElse(999.0);
+
+    // Reject garbage
+    if (tagCount == 0) return false;
+
+    // Reject far poses
+    if (avgDistance > 4.5) return false;
+
+    // Reject single-tag far shots
+    if (tagCount == 1 && avgDistance > 2.5) return false;
+
+    // Reject rear camera while spinning fast
+    if (cam == rearCamera && Math.abs(drivebase.getRobotVelocity().omegaRadiansPerSecond) > 2.5) {
+      return false;
+    }
+
+    return true;
+  }
+
   private void processCamera(PhotonCamera cam, PhotonPoseEstimator estimator) {
 
     List<PhotonPipelineResult> results = cam.getAllUnreadResults();
@@ -195,6 +226,17 @@ public class VisionSubsystem extends SubsystemBase {
             lastEstimatedPose = Optional.of(est2d);
             lastEstimatedTimestamp = est.timestampSeconds;
 
+            double now = Timer.getFPGATimestamp();
+
+            if (now - lastVisionFuseTime < MIN_VISION_FUSE_PERIOD) {
+              return;
+            }
+
+            if (!isVisionMeasurementTrusted(est, cam)) {
+              return;
+            }
+
+            lastVisionFuseTime = now;
             drivebase.addVisionMeasurement(est2d, est.timestampSeconds);
 
             SmartDashboard.putBoolean("Vision/HasPose", true);
