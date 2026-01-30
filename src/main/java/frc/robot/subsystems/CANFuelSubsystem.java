@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Constants.FuelConstants.*;
 
 import com.revrobotics.PersistMode;
@@ -26,11 +27,12 @@ public class CANFuelSubsystem extends SubsystemBase {
     // all methods in this subsystem pull their values from the dashbaord to allow
     // you to tune the values easily, and then replace the values in Constants.java
     // with your new values. For more information, see the Software Guide.
-    SmartDashboard.putNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE);
-    SmartDashboard.putNumber("Intaking intake roller value", INTAKING_INTAKE_VOLTAGE);
-    SmartDashboard.putNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE);
-    SmartDashboard.putNumber("Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE);
-    SmartDashboard.putNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE);
+    SmartDashboard.putNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE.in(Volts));
+    SmartDashboard.putNumber("Intaking intake roller value", INTAKING_INTAKE_VOLTAGE.in(Volts));
+    SmartDashboard.putNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE.in(Volts));
+    SmartDashboard.putNumber(
+        "Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE.in(Volts));
+    SmartDashboard.putNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE.in(Volts));
 
     // create the configuration for the feeder roller, set a current limit and apply
     // the config to the controller
@@ -51,26 +53,34 @@ public class CANFuelSubsystem extends SubsystemBase {
   // A method to set the rollers to values for intaking
   public void intake() {
     feederRoller.setVoltage(
-        SmartDashboard.getNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE));
+        SmartDashboard.getNumber(
+            "Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE.in(Volts)));
     intakeLauncherRoller.setVoltage(
-        SmartDashboard.getNumber("Intaking intake roller value", INTAKING_INTAKE_VOLTAGE));
+        SmartDashboard.getNumber(
+            "Intaking intake roller value", INTAKING_INTAKE_VOLTAGE.in(Volts)));
   }
 
   // A method to set the rollers to values for ejecting fuel out the intake. Uses
   // the same values as intaking, but in the opposite direction.
   public void eject() {
     feederRoller.setVoltage(
-        -1 * SmartDashboard.getNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE));
+        -1
+            * SmartDashboard.getNumber(
+                "Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE.in(Volts)));
     intakeLauncherRoller.setVoltage(
-        -1 * SmartDashboard.getNumber("Intaking launcher roller value", INTAKING_INTAKE_VOLTAGE));
+        -1
+            * SmartDashboard.getNumber(
+                "Intaking launcher roller value", INTAKING_INTAKE_VOLTAGE.in(Volts)));
   }
 
   // A method to set the rollers to values for launching.
   public void launch() {
     feederRoller.setVoltage(
-        SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
+        SmartDashboard.getNumber(
+            "Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE.in(Volts)));
     intakeLauncherRoller.setVoltage(
-        SmartDashboard.getNumber("Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE));
+        SmartDashboard.getNumber(
+            "Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE.in(Volts)));
   }
 
   // A method to stop the rollers
@@ -83,9 +93,10 @@ public class CANFuelSubsystem extends SubsystemBase {
   // push Fuel away from the launcher
   public void spinUp() {
     feederRoller.setVoltage(
-        SmartDashboard.getNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE));
+        SmartDashboard.getNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE.in(Volts)));
     intakeLauncherRoller.setVoltage(
-        SmartDashboard.getNumber("Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE));
+        SmartDashboard.getNumber(
+            "Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE.in(Volts)));
   }
 
   // A command factory to turn the spinUp method into a command that requires this
