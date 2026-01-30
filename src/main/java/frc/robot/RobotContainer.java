@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Seconds;
 import static frc.robot.Constants.FuelConstants.*;
 import static frc.robot.Constants.OperatorConstants.*;
 
@@ -77,7 +78,7 @@ public class RobotContainer {
         "Launch",
         ballSubsystem
             .spinUpCommand()
-            .withTimeout(SPIN_UP_SECONDS)
+            .withTimeout(SPIN_UP_TIME.in(Seconds))
             .andThen(ballSubsystem.launchCommand()));
     NamedCommands.registerCommand("Stop", ballSubsystem.stopCommand());
     NamedCommands.registerCommand("Intake", ballSubsystem.intakeCommand());
@@ -108,7 +109,7 @@ public class RobotContainer {
         .whileTrue(
             ballSubsystem
                 .spinUpCommand()
-                .withTimeout(SPIN_UP_SECONDS)
+                .withTimeout(SPIN_UP_TIME.in(Seconds))
                 .andThen(ballSubsystem.launchCommand())
                 .finallyDo(() -> ballSubsystem.stop()));
     // While the A button is held on the driver controller, eject fuel back out
