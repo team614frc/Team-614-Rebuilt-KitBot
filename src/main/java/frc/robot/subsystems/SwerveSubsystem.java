@@ -58,11 +58,10 @@ public class SwerveSubsystem extends SubsystemBase {
         false); // !SwerveDriveTelemetry.isSimulation); // Disables cosine compensation for
     // simulations since it causes discrepancies not seen in real life.
     swerveDrive.setAngularVelocityCompensation(
-        false, false,
+        true, true,
         0.1); // Correct for skew that gets worse as angular velocity increases. Start with a
     // coefficient of 0.1.
-    swerveDrive.setChassisDiscretization(true, 0.02);
-    swerveDrive.setAngularVelocityCompensation(true, true, 0.1);
+    swerveDrive.setChassisDiscretization(true, 0.015);
     setupPathPlanner();
   }
 
@@ -241,5 +240,11 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public SwerveDrive getSwerveDrive() {
     return swerveDrive;
+  }
+
+  /** Smoothly correct odometry with vision (avoids jumps) */
+  public void addVisionMeasurement(Pose2d visionPose, double timestampSeconds) {
+    // YAGSL method: updates internal pose estimator with vision measurement
+    swerveDrive.addVisionMeasurement(visionPose, timestampSeconds);
   }
 }
