@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Seconds;
 import static frc.robot.Constants.FuelConstants.*;
 import static frc.robot.Constants.OperatorConstants.*;
 import static frc.robot.subsystems.VisionSubsystem.MAX_LINEAR_SPEED_MPS;
@@ -82,7 +83,7 @@ public class RobotContainer {
         "Launch",
         ballSubsystem
             .spinUpCommand()
-            .withTimeout(SPIN_UP_SECONDS)
+            .withTimeout(SPIN_UP_TIME.in(Seconds))
             .andThen(ballSubsystem.launchCommand())
             .withTimeout(5.85)
             .finallyDo(() -> ballSubsystem.stop()));
@@ -90,7 +91,7 @@ public class RobotContainer {
         "4Launch",
         ballSubsystem
             .spinUpCommand()
-            .withTimeout(SPIN_UP_SECONDS)
+            .withTimeout(SPIN_UP_TIME.in(Seconds))
             .andThen(ballSubsystem.launchCommand())
             .withTimeout(4)
             .finallyDo(() -> ballSubsystem.stop()));
@@ -126,7 +127,7 @@ public class RobotContainer {
         .whileTrue(
             ballSubsystem
                 .spinUpCommand()
-                .withTimeout(SPIN_UP_SECONDS)
+                .withTimeout(SPIN_UP_TIME.in(Seconds))
                 .andThen(ballSubsystem.launchCommand())
                 .finallyDo(() -> ballSubsystem.stop()));
 
@@ -135,7 +136,7 @@ public class RobotContainer {
         .whileTrue(
             ballSubsystem
                 .spinUpFarCommand()
-                .withTimeout(SPIN_UP_SECONDS)
+                .withTimeout(SPIN_UP_TIME.in(Seconds))
                 .andThen(ballSubsystem.launchFarCommand())
                 .finallyDo(() -> ballSubsystem.stop()));
 

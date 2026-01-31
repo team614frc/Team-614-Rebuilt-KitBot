@@ -6,8 +6,11 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.units.measure.Voltage;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -19,7 +22,7 @@ import edu.wpi.first.units.measure.Current;
  */
 public final class Constants {
   public static final class DrivebaseConstants {
-    public static final double MAX_SPEED = Units.feetToMeters(17.5);
+    public static final LinearVelocity MAX_SPEED = FeetPerSecond.of(17.5);
   }
 
   public static final class FuelConstants {
@@ -34,33 +37,24 @@ public final class Constants {
     // Voltage values for various fuel operations. These values may need to be tuned
     // based on exact robot construction.
     // See the Software Guide for tuning information
-    public static final double INTAKING_FEEDER_VOLTAGE = -12;
-    public static final double INTAKING_INTAKE_VOLTAGE = 10;
-    public static final double LAUNCHING_FEEDER_VOLTAGE = 12; // 9
-    public static final double LAUNCHING_LAUNCHER_VOLTAGE = 6.05; // 10.6
-    public static final double LAUNCHING_FARLAUNCHER_VOLTAGE = 12; // 10.6
-    public static final double SPIN_UP_FEEDER_VOLTAGE = -7; // -6
-    public static final double SPIN_UP_SECONDS = 0.3;
-    // ===== NEW: WPILib PID Constants for Launcher Flywheel Control =====
-
-    // PID Gains - START WITH THESE, THEN TUNE ON YOUR ROBOT
-    // These values work with RPM (not RPS) for easier tuning
+    public static final Voltage INTAKING_FEEDER_VOLTAGE = Volts.of(-12);
+    public static final Voltage INTAKING_INTAKE_VOLTAGE = Volts.of(10);
+    public static final Voltage LAUNCHING_FEEDER_VOLTAGE = Volts.of(12);
+    public static final Voltage LAUNCHING_LAUNCHER_VOLTAGE = Volts.of(10.6);
+    public static final Voltage SPIN_UP_FEEDER_VOLTAGE = Volts.of(-7);
+    public static final Time SPIN_UP_TIME = Seconds.of(0.3);
 
     // kP: Proportional gain - voltage per RPM of error
-    // Start small since we're working in RPM (large numbers)
     public static final double LAUNCHER_KP = 0.0001;
 
     // kI: Integral gain - voltage per RPM*second of accumulated error
-    // Usually not needed for flywheel control - start at 0
     public static final double LAUNCHER_KI = 0.0;
 
     // kD: Derivative gain - voltage per (RPM/second) rate of change
-    // Helps reduce oscillation - start at 0, add if needed
     public static final double LAUNCHER_KD = 0.0;
 
     // Feedforward Gains
     // kS: Static gain - voltage to overcome friction (volts)
-    // Minimum voltage needed to get the motor moving
     public static final double LAUNCHER_KS = 0.0;
 
     // kV: Velocity gain - voltage per rotation/second
@@ -74,9 +68,8 @@ public final class Constants {
     public static final double LAUNCHER_IZONE = 100.0;
 
     // Target velocities in RPM
-    // Tune these values based on testing to find optimal shooting speeds
-    public static final double LAUNCHER_TARGET_RPM = 3400.0; // Normal shot
-    public static final double LAUNCHER_FAR_TARGET_RPM = 4000.0; // Far shot
+    public static final AngularVelocity LAUNCHER_TARGET_RPM = RPM.of(3400); // Normal shot
+    public static final AngularVelocity LAUNCHER_FAR_TARGET_RPM = RPM.of(4000); // Far shot
 
     // Velocity tolerance in RPM
     // How close to target velocity before considering "at speed"

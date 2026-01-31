@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.Constants.FuelConstants.*;
 
 import com.revrobotics.PersistMode;
@@ -40,11 +42,12 @@ public class CANFuelSubsystem extends SubsystemBase {
     // all methods in this subsystem pull their values from the dashbaord to allow
     // you to tune the values easily, and then replace the values in Constants.java
     // with your new values. For more information, see the Software Guide.
-    SmartDashboard.putNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE);
-    SmartDashboard.putNumber("Intaking intake roller value", INTAKING_INTAKE_VOLTAGE);
-    SmartDashboard.putNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE);
-    SmartDashboard.putNumber("Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE);
-    SmartDashboard.putNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE);
+    SmartDashboard.putNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE.in(Volts));
+    SmartDashboard.putNumber("Intaking intake roller value", INTAKING_INTAKE_VOLTAGE.in(Volts));
+    SmartDashboard.putNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE.in(Volts));
+    SmartDashboard.putNumber(
+        "Launching launcher roller value", LAUNCHING_LAUNCHER_VOLTAGE.in(Volts));
+    SmartDashboard.putNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE.in(Volts));
 
     // PIDF tuning values - start with these and tune on the robot
     SmartDashboard.putNumber("Launcher kP", LAUNCHER_KP);
@@ -52,8 +55,8 @@ public class CANFuelSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Launcher kD", LAUNCHER_KD);
     SmartDashboard.putNumber("Launcher kS", LAUNCHER_KS);
     SmartDashboard.putNumber("Launcher kV", LAUNCHER_KV);
-    SmartDashboard.putNumber("Target Launcher RPM", LAUNCHER_TARGET_RPM);
-    SmartDashboard.putNumber("Target Launcher Far RPM", LAUNCHER_FAR_TARGET_RPM);
+    SmartDashboard.putNumber("Target Launcher RPM", LAUNCHER_TARGET_RPM.in(RPM));
+    SmartDashboard.putNumber("Target Launcher Far RPM", LAUNCHER_FAR_TARGET_RPM.in(RPM));
 
     // create the configuration for the feeder roller, set a current limit and apply
     // the config to the controller
@@ -96,9 +99,11 @@ public class CANFuelSubsystem extends SubsystemBase {
   public void intake() {
     useVelocityControl = false;
     feederRoller.setVoltage(
-        SmartDashboard.getNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE));
+        SmartDashboard.getNumber(
+            "Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE.in(Volts)));
     intakeLauncherRoller.setVoltage(
-        SmartDashboard.getNumber("Intaking intake roller value", INTAKING_INTAKE_VOLTAGE));
+        SmartDashboard.getNumber(
+            "Intaking intake roller value", INTAKING_INTAKE_VOLTAGE.in(Volts)));
     targetLauncherVelocity = 0.0;
     launcherPID.reset();
   }
@@ -108,9 +113,13 @@ public class CANFuelSubsystem extends SubsystemBase {
   public void eject() {
     useVelocityControl = false;
     feederRoller.setVoltage(
-        -1 * SmartDashboard.getNumber("Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE));
+        -1
+            * SmartDashboard.getNumber(
+                "Intaking feeder roller value", INTAKING_FEEDER_VOLTAGE.in(Volts)));
     intakeLauncherRoller.setVoltage(
-        -1 * SmartDashboard.getNumber("Intaking launcher roller value", INTAKING_INTAKE_VOLTAGE));
+        -1
+            * SmartDashboard.getNumber(
+                "Intaking launcher roller value", INTAKING_INTAKE_VOLTAGE.in(Volts)));
     targetLauncherVelocity = 0.0;
     launcherPID.reset();
   }
@@ -119,20 +128,20 @@ public class CANFuelSubsystem extends SubsystemBase {
   public void launch() {
     useVelocityControl = true;
     feederRoller.setVoltage(
-        SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
+        SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE.in(Volts)));
 
     // Set target velocity for PID control
-    targetLauncherVelocity = SmartDashboard.getNumber("Target Launcher RPM", LAUNCHER_TARGET_RPM);
+    targetLauncherVelocity = SmartDashboard.getNumber("Target Launcher RPM", LAUNCHER_TARGET_RPM.in(RPM));
   }
 
   public void launchFar() {
     useVelocityControl = true;
     feederRoller.setVoltage(
-        SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE));
+        SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE.in(Volts)));
 
     // Set target velocity for far shot
     targetLauncherVelocity =
-        SmartDashboard.getNumber("Target Launcher Far RPM", LAUNCHER_FAR_TARGET_RPM);
+        SmartDashboard.getNumber("Target Launcher Far RPM", LAUNCHER_FAR_TARGET_RPM.in(RPM));
   }
 
   // A method to stop the rollers
@@ -149,20 +158,20 @@ public class CANFuelSubsystem extends SubsystemBase {
   public void spinUp() {
     useVelocityControl = true;
     feederRoller.setVoltage(
-        SmartDashboard.getNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE));
+        SmartDashboard.getNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE.in(Volts)));
 
     // Set target velocity for PID control
-    targetLauncherVelocity = SmartDashboard.getNumber("Target Launcher RPM", LAUNCHER_TARGET_RPM);
+    targetLauncherVelocity = SmartDashboard.getNumber("Target Launcher RPM", LAUNCHER_TARGET_RPM.in(RPM));
   }
 
   public void spinUpFar() {
     useVelocityControl = true;
     feederRoller.setVoltage(
-        SmartDashboard.getNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE));
+        SmartDashboard.getNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE.in(Volts)));
 
     // Set target velocity for far shot
     targetLauncherVelocity =
-        SmartDashboard.getNumber("Target Launcher Far RPM", LAUNCHER_FAR_TARGET_RPM);
+        SmartDashboard.getNumber("Target Launcher Far RPM", LAUNCHER_FAR_TARGET_RPM.in(RPM));
   }
 
   /** Returns true if the launcher is at the target velocity (within tolerance) */
