@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "forward"
+            "pathName": "HO_PATH_1"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "kitbot-1"
+            "pathName": "HO_PATH_2"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "kitbot-2"
+            "pathName": "HO_PATH_3"
           }
         },
         {

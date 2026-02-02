@@ -2,7 +2,10 @@
   "robotWidth": 0.698,
   "robotLength": 0.698,
   "holonomicMode": true,
-  "pathFolders": [],
+  "pathFolders": [
+    "HUB_OUTPOST",
+    "TEST"
+  ],
   "autoFolders": [],
   "defaultMaxVel": 3.9,
   "defaultMaxAccel": 4.7,
