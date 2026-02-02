@@ -128,16 +128,19 @@ public class CANFuelSubsystem extends SubsystemBase {
   public void launch() {
     useVelocityControl = true;
     feederRoller.setVoltage(
-        SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE.in(Volts)));
+        SmartDashboard.getNumber(
+            "Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE.in(Volts)));
 
     // Set target velocity for PID control
-    targetLauncherVelocity = SmartDashboard.getNumber("Target Launcher RPM", LAUNCHER_TARGET_RPM.in(RPM));
+    targetLauncherVelocity =
+        SmartDashboard.getNumber("Target Launcher RPM", LAUNCHER_TARGET_RPM.in(RPM));
   }
 
   public void launchFar() {
     useVelocityControl = true;
     feederRoller.setVoltage(
-        SmartDashboard.getNumber("Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE.in(Volts)));
+        SmartDashboard.getNumber(
+            "Launching feeder roller value", LAUNCHING_FEEDER_VOLTAGE.in(Volts)));
 
     // Set target velocity for far shot
     targetLauncherVelocity =
@@ -161,7 +164,8 @@ public class CANFuelSubsystem extends SubsystemBase {
         SmartDashboard.getNumber("Spin-up feeder roller value", SPIN_UP_FEEDER_VOLTAGE.in(Volts)));
 
     // Set target velocity for PID control
-    targetLauncherVelocity = SmartDashboard.getNumber("Target Launcher RPM", LAUNCHER_TARGET_RPM.in(RPM));
+    targetLauncherVelocity =
+        SmartDashboard.getNumber("Target Launcher RPM", LAUNCHER_TARGET_RPM.in(RPM));
   }
 
   public void spinUpFar() {
