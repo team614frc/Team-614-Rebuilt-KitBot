@@ -146,13 +146,6 @@ public class RobotContainer {
             vision.rotateToAllianceTagWhileDriving(
                 () -> driverXbox.getLeftY() * MAX_LINEAR_SPEED_MPS,
                 () -> driverXbox.getLeftX() * MAX_LINEAR_SPEED_MPS));
-
-    // // While the A button is held on the driver controller, eject fuel back out
-    // // the intake
-    // driverXbox
-    //     .a()
-    //     .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.eject(), () ->
-    // ballSubsystem.stop()));
   }
 
   /**
