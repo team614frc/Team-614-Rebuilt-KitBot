@@ -81,6 +81,8 @@ public final class Constants {
     // values in the Joystick tab of the Driver Station software
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
+    public static final int OUTREACH_CONTROLLER_PORT = 3;
+
     public static final double DEADBAND = 0.1;
   }
 }

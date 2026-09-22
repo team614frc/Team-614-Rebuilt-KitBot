@@ -47,6 +47,9 @@ public class RobotContainer {
   private final CommandXboxController codriverXbox =
       new CommandXboxController(OPERATOR_CONTROLLER_PORT);
 
+      private final CommandXboxController outreachXbox =
+      new CommandXboxController(OperatorConstants.OUTREACH_CONTROLLER_PORT);
+
   // The autonomous chooser
   private final SendableChooser<Command> autoChooser;
 
@@ -72,6 +75,28 @@ public class RobotContainer {
           .withControllerRotationAxis(() -> driverXbox.getRawAxis(2))
           .deadband(OperatorConstants.DEADBAND)
           .scaleTranslation(0.95)
+          .allianceRelativeControl(true);
+
+
+//Outreach robot
+          SwerveInputStream driveAngularVelocity =
+      SwerveInputStream.of(
+              drivebase.getSwerveDrive(),
+              () -> -outreachXbox.getLeftY(),
+              () -> -outreachXbox.getLeftX())
+          .withControllerRotationAxis(() -> -outreachXbox.getRightX())
+          .deadband(OperatorConstants.DEADBAND)
+          .scaleTranslation(0.5)
+          .allianceRelativeControl(true);
+
+  SwerveInputStream driveAngularVelocityKeyboard =
+      SwerveInputStream.of(
+              drivebase.getSwerveDrive(),
+              () -> -outreachXbox.getLeftY(),
+              () -> -outreachXbox.getLeftX())
+          .withControllerRotationAxis(() -> outreachXbox.getRawAxis(2))
+          .deadband(OperatorConstants.DEADBAND)
+          .scaleTranslation(0.5)
           .allianceRelativeControl(true);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -146,6 +171,41 @@ public class RobotContainer {
             vision.rotateToAllianceTagWhileDriving(
                 () -> driverXbox.getLeftY() * MAX_LINEAR_SPEED_MPS,
                 () -> driverXbox.getLeftX() * MAX_LINEAR_SPEED_MPS));
+
+
+
+                //Outreach controller bindings
+                 outreachXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+    // While the left bumper on driver controller is held, intake Fuel
+    outreachXbox
+        .leftBumper()
+        .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.intake(), () -> ballSubsystem.stop()));
+    // While the right bumper on the driver controller is held, spin up for 1
+    // second, then launch fuel. When the button is released, stop.
+    outreachXbox
+        .rightBumper()
+        .whileTrue(
+            ballSubsystem
+                .spinUpCommand()
+                .withTimeout(SPIN_UP_TIME.in(Seconds))
+                .andThen(ballSubsystem.launchCommand())
+                .finallyDo(() -> ballSubsystem.stop()));
+
+    outreachXbox
+        .rightTrigger()
+        .whileTrue(
+            ballSubsystem
+                .spinUpFarCommand()
+                .withTimeout(SPIN_UP_TIME.in(Seconds))
+                .andThen(ballSubsystem.launchFarCommand())
+                .finallyDo(() -> ballSubsystem.stop()));
+
+    outreachXbox
+        .a()
+        .whileTrue(
+            vision.rotateToAllianceTagWhileDriving(
+                () -> outreachXbox.getLeftY() * MAX_LINEAR_SPEED_MPS,
+                () -> outreachXbox.getLeftX() * MAX_LINEAR_SPEED_MPS));
   }
 
   /**
