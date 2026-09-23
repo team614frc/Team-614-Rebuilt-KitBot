@@ -4,8 +4,11 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
-
+import static edu.wpi.first.units.Units.Amp;
+import static edu.wpi.first.units.Units.FeetPerSecond;
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -81,6 +84,7 @@ public final class Constants {
     // values in the Joystick tab of the Driver Station software
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int OPERATOR_CONTROLLER_PORT = 1;
+    public static final int OUTREACH_CONTROLLER_PORT = 3;
     public static final double DEADBAND = 0.1;
   }
 }
