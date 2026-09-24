@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.FeetPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.LinearVelocity;
@@ -26,6 +27,7 @@ import edu.wpi.first.units.measure.Voltage;
 public final class Constants {
   public static final class DrivebaseConstants {
     public static final LinearVelocity MAX_SPEED = FeetPerSecond.of(17.5);
+    public static final double OUTREACH_SPEED_SCALE = 0.40;
   }
 
   public static final class FuelConstants {
