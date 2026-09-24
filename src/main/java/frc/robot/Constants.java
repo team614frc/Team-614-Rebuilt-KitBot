@@ -73,8 +73,8 @@ public final class Constants {
     public static final double LAUNCHER_IZONE = 100.0;
 
     // Target velocities in RPM
-    public static final AngularVelocity LAUNCHER_TARGET_SPEED = RPM.of(3400); // Normal shot
-    public static final AngularVelocity LAUNCHER_FAR_TARGET_SPEED = RPM.of(4000); // Far shot
+    public static final AngularVelocity LAUNCHER_TARGET_SPEED = RPM.of(2000); // Normal shot
+    public static final AngularVelocity LAUNCHER_FAR_TARGET_SPEED = RPM.of(2100); // Far shot
 
     // Velocity tolerance in RPM
     // How close to target velocity before considering "at speed"

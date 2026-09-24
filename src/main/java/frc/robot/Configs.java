@@ -13,7 +13,7 @@ public final class Configs {
 
     static {
       FEEDER_CONFIG
-          .idleMode(IdleMode.kBrake)
+          .idleMode(IdleMode.kCoast)
           .inverted(true)
           .smartCurrentLimit((int) Constants.FuelConstants.FEEDER_MOTOR_CURRENT_LIMIT.in(Amp));
     }
