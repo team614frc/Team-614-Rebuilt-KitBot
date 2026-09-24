@@ -46,8 +46,8 @@ public class RobotContainer {
   // The operator's controller
   private final CommandXboxController codriverXbox =
       new CommandXboxController(OPERATOR_CONTROLLER_PORT);
-// The outreach controller
-      private final CommandXboxController outreachXbox =
+  // The outreach controller
+  private final CommandXboxController outreachXbox =
       new CommandXboxController(OperatorConstants.OUTREACH_CONTROLLER_PORT);
 
   // The autonomous chooser
@@ -150,51 +150,43 @@ public class RobotContainer {
                 () -> driverXbox.getLeftY() * MAX_LINEAR_SPEED_MPS,
                 () -> driverXbox.getLeftX() * MAX_LINEAR_SPEED_MPS));
 
-                driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+    driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
-   // OUTREACH
-final double OUTREACH_SPEED_SCALE = 0.40;
+    // OUTREACH
+    final double OUTREACH_SPEED_SCALE = 0.40;
 
-// Intake
-outreachXbox
-    .leftBumper()
-    .whileTrue(
-        ballSubsystem.runEnd(
-            () -> ballSubsystem.intake(),
-            () -> ballSubsystem.stop()));
+    // Intake
+    outreachXbox
+        .leftBumper()
+        .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.intake(), () -> ballSubsystem.stop()));
 
-// Shoot
-outreachXbox
-    .rightBumper()
-    .whileTrue(
-        ballSubsystem
-            .spinUpCommand()
-            .withTimeout(SPIN_UP_TIME.in(Seconds))
-            .andThen(ballSubsystem.launchCommand())
-            .finallyDo(() -> ballSubsystem.stop()));
+    // Shoot
+    outreachXbox
+        .rightBumper()
+        .whileTrue(
+            ballSubsystem
+                .spinUpCommand()
+                .withTimeout(SPIN_UP_TIME.in(Seconds))
+                .andThen(ballSubsystem.launchCommand())
+                .finallyDo(() -> ballSubsystem.stop()));
 
-// Far shot
-outreachXbox
-    .rightTrigger()
-    .whileTrue(
-        ballSubsystem
-            .spinUpFarCommand()
-            .withTimeout(SPIN_UP_TIME.in(Seconds))
-            .andThen(ballSubsystem.launchFarCommand())
-            .finallyDo(() -> ballSubsystem.stop()));
+    // Far shot
+    outreachXbox
+        .rightTrigger()
+        .whileTrue(
+            ballSubsystem
+                .spinUpFarCommand()
+                .withTimeout(SPIN_UP_TIME.in(Seconds))
+                .andThen(ballSubsystem.launchFarCommand())
+                .finallyDo(() -> ballSubsystem.stop()));
 
-// Aim at AprilTag + drive slowly
-outreachXbox
-    .a()
-    .whileTrue(
-        vision.rotateToAllianceTagWhileDriving(
-            () -> outreachXbox.getLeftY()
-                * MAX_LINEAR_SPEED_MPS
-                * OUTREACH_SPEED_SCALE,
-            () -> outreachXbox.getLeftX()
-                * MAX_LINEAR_SPEED_MPS
-                * OUTREACH_SPEED_SCALE));
-                
+    // Aim at AprilTag + drive slowly
+    outreachXbox
+        .a()
+        .whileTrue(
+            vision.rotateToAllianceTagWhileDriving(
+                () -> outreachXbox.getLeftY() * MAX_LINEAR_SPEED_MPS * OUTREACH_SPEED_SCALE,
+                () -> outreachXbox.getLeftX() * MAX_LINEAR_SPEED_MPS * OUTREACH_SPEED_SCALE));
   }
 
   /**
