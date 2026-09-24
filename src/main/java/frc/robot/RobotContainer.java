@@ -4,12 +4,14 @@
 
 package frc.robot;
 
-import java.io.File;
+import static edu.wpi.first.units.Units.Seconds;
+import static frc.robot.Constants.FuelConstants.SPIN_UP_TIME;
+import static frc.robot.Constants.OperatorConstants.DRIVER_CONTROLLER_PORT;
+import static frc.robot.Constants.OperatorConstants.OPERATOR_CONTROLLER_PORT;
+import static frc.robot.subsystems.VisionSubsystem.MAX_LINEAR_SPEED_MPS;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
-import static edu.wpi.first.units.Units.Seconds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -18,14 +20,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import static frc.robot.Constants.FuelConstants.SPIN_UP_TIME;
 import frc.robot.Constants.OperatorConstants;
-import static frc.robot.Constants.OperatorConstants.DRIVER_CONTROLLER_PORT;
-import static frc.robot.Constants.OperatorConstants.OPERATOR_CONTROLLER_PORT;
 import frc.robot.subsystems.CANFuelSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
-import static frc.robot.subsystems.VisionSubsystem.MAX_LINEAR_SPEED_MPS;
+import java.io.File;
 import swervelib.SwerveInputStream;
 
 /**
