@@ -5,8 +5,9 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.Seconds;
-import static frc.robot.Constants.FuelConstants.*;
-import static frc.robot.Constants.OperatorConstants.*;
+import static frc.robot.Constants.FuelConstants.SPIN_UP_TIME;
+import static frc.robot.Constants.OperatorConstants.DRIVER_CONTROLLER_PORT;
+import static frc.robot.Constants.OperatorConstants.OPERATOR_CONTROLLER_PORT;
 import static frc.robot.subsystems.VisionSubsystem.MAX_LINEAR_SPEED_MPS;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -46,8 +47,8 @@ public class RobotContainer {
   // The operator's controller
   private final CommandXboxController codriverXbox =
       new CommandXboxController(OPERATOR_CONTROLLER_PORT);
-
-      private final CommandXboxController outreachXbox =
+  // The outreach controller
+  private final CommandXboxController outreachXbox =
       new CommandXboxController(OperatorConstants.OUTREACH_CONTROLLER_PORT);
 
   // The autonomous chooser
@@ -172,16 +173,17 @@ public class RobotContainer {
                 () -> driverXbox.getLeftY() * MAX_LINEAR_SPEED_MPS,
                 () -> driverXbox.getLeftX() * MAX_LINEAR_SPEED_MPS));
 
+    driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
+    // OUTREACH
+    final double OUTREACH_SPEED_SCALE = 0.40;
 
-                //Outreach controller bindings
-                 outreachXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-    // While the left bumper on driver controller is held, intake Fuel
+    // Intake
     outreachXbox
         .leftBumper()
         .whileTrue(ballSubsystem.runEnd(() -> ballSubsystem.intake(), () -> ballSubsystem.stop()));
-    // While the right bumper on the driver controller is held, spin up for 1
-    // second, then launch fuel. When the button is released, stop.
+
+    // Shoot
     outreachXbox
         .rightBumper()
         .whileTrue(
@@ -191,6 +193,7 @@ public class RobotContainer {
                 .andThen(ballSubsystem.launchCommand())
                 .finallyDo(() -> ballSubsystem.stop()));
 
+    // Far shot
     outreachXbox
         .rightTrigger()
         .whileTrue(
@@ -200,12 +203,13 @@ public class RobotContainer {
                 .andThen(ballSubsystem.launchFarCommand())
                 .finallyDo(() -> ballSubsystem.stop()));
 
+    // Aim at AprilTag + drive slowly
     outreachXbox
         .a()
         .whileTrue(
             vision.rotateToAllianceTagWhileDriving(
-                () -> outreachXbox.getLeftY() * MAX_LINEAR_SPEED_MPS,
-                () -> outreachXbox.getLeftX() * MAX_LINEAR_SPEED_MPS));
+                () -> outreachXbox.getLeftY() * MAX_LINEAR_SPEED_MPS * OUTREACH_SPEED_SCALE,
+                () -> outreachXbox.getLeftX() * MAX_LINEAR_SPEED_MPS * OUTREACH_SPEED_SCALE));
   }
 
   /**
