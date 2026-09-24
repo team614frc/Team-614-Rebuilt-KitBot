@@ -78,28 +78,6 @@ public class RobotContainer {
           .scaleTranslation(0.95)
           .allianceRelativeControl(true);
 
-
-//Outreach robot
-          SwerveInputStream driveAngularVelocity =
-      SwerveInputStream.of(
-              drivebase.getSwerveDrive(),
-              () -> -outreachXbox.getLeftY(),
-              () -> -outreachXbox.getLeftX())
-          .withControllerRotationAxis(() -> -outreachXbox.getRightX())
-          .deadband(OperatorConstants.DEADBAND)
-          .scaleTranslation(0.5)
-          .allianceRelativeControl(true);
-
-  SwerveInputStream driveAngularVelocityKeyboard =
-      SwerveInputStream.of(
-              drivebase.getSwerveDrive(),
-              () -> -outreachXbox.getLeftY(),
-              () -> -outreachXbox.getLeftX())
-          .withControllerRotationAxis(() -> outreachXbox.getRawAxis(2))
-          .deadband(OperatorConstants.DEADBAND)
-          .scaleTranslation(0.5)
-          .allianceRelativeControl(true);
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     configureBindings();
