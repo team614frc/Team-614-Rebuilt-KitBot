@@ -153,7 +153,7 @@ public class RobotContainer {
                 driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
    // OUTREACH
-private static final double OUTREACH_SPEED_SCALE = 0.40;
+final double OUTREACH_SPEED_SCALE = 0.40;
 
 // Intake
 outreachXbox
