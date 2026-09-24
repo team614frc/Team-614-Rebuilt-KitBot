@@ -7,12 +7,12 @@
   "drive": {
     "type": "krakenx60",
     "id": 23,
-    "canbus": "canivore"
+    "canbus": "rio"
   },
   "angle": {
     "type": "krakenx60",
     "id": 14,
-    "canbus": "canivore"
+    "canbus": "rio"
   },
   "encoder": {
     "type": "thrifty",
