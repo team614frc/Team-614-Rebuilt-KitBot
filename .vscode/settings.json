@@ -1,12 +1,4 @@
-{
-  "java.jdt.ls.java.home": "C:\\Users\\Public\\wpilib\\2026\\jdk",
-  "java.configuration.runtimes": [
-    {
-      "name": "JavaSE-17",
-      "path": "C:\\Users\\Public\\wpilib\\2026\\jdk",
-      "default": true
-    }
-  ],
+ {
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.server.launchMode": "Standard",
   "files.exclude": {
@@ -31,7 +23,7 @@
         "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release" ,
         "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
       }
-    }
+    },
   ],
   "java.test.defaultConfig": "WPIlibUnitTests",
   "java.import.gradle.annotationProcessing.enabled": false,
@@ -63,8 +55,7 @@
     "javax.smartcardio.*",
     "edu.wpi.first.math.proto.*",
     "edu.wpi.first.math.**.proto.*",
-    "edu.wpi.first.math.**.struct.*"
+    "edu.wpi.first.math.**.struct.*",
   ],
-  "java.dependency.enableDependencyCheckup": false,
-  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable"
-}
+  "java.dependency.enableDependencyCheckup": false
+} 
