@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.HashSet;
 import java.util.List;
@@ -82,7 +83,7 @@ public class VisionSubsystem extends SubsystemBase {
 
   // For the April Tags we want to align and drive to
   private final Set<Integer> allowedTagIDs =
-      new HashSet<>(Set.of(6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22));
+      new HashSet<>(Set.of(4, 5, 6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22));
 
   // Fields for PhotonPoseEstimator usage
   private final Transform3d robotToCamera;
@@ -473,5 +474,66 @@ public class VisionSubsystem extends SubsystemBase {
           // Mainly for debugging purposes if this robot rotates to Timbuktu
           SmartDashboard.putNumber("Vision/ScoringCenterErrorDeg", Math.toDegrees(headingError));
         });
+  }
+
+  private static final int[] PARALELL_TAG_IDS = {4, 5};
+  private static final double PARALLEL_ALIGN_OFFSET_DEG = 0.0;
+
+  public Optional<Rotation2d> getParallelToTagsHeading() {
+    if (fieldLayout == null) return Optional.empty();
+
+    Optional<Pose2d> t1 = fieldLayout.getTagPose(PARALELL_TAG_IDS[0]).map(p -> p.toPose2d());
+    Optional<Pose2d> t2 = fieldLayout.getTagPose(PARALELL_TAG_IDS[1]).map(p -> p.toPose2d());
+    if (t1.isEmpty() || t2.isEmpty()) return Optional.empty();
+
+    // Average the two tag normals via vector sum (avoids angle-wrap issues),
+    double x = t1.get().getRotation().getCos() + t2.get().getRotation().getCos();
+    double y = t1.get().getRotation().getSin() + t2.get().getRotation().getSin();
+    Rotation2d wallNormal = new Rotation2d(x, y);
+
+    return Optional.of(wallNormal.plus(Rotation2d.fromDegrees(180.0 + PARALLEL_ALIGN_OFFSET_DEG)));
+  }
+
+  /** Rotates in place to be parallel to tags 4 & 5. No translation. Hold the button to hold. */
+  public Command alignParallelToTags() {
+    return Commands.run(
+            () -> {
+              Optional<Rotation2d> target = getParallelToTagsHeading();
+              if (target.isEmpty()) {
+                drivebase.drive(new ChassisSpeeds(0, 0, 0));
+                return;
+              }
+
+              double headingError =
+                  target.get().minus(drivebase.getPose().getRotation()).getRadians();
+              headingError = Math.atan2(Math.sin(headingError), Math.cos(headingError));
+
+              double omega = ROTATION_KP * headingError * FAR_GAIN_MULTIPLIER;
+
+              // Minimum rotation snap, same as other align commands
+              if (Math.abs(Math.toDegrees(headingError)) > ANGLE_TOLERANCE_DEGREES
+                  && Math.abs(omega) < MIN_ANGULAR_SPEED_RAD_PER_SEC) {
+                omega = Math.copySign(MIN_ANGULAR_SPEED_RAD_PER_SEC, omega);
+              }
+              // Stop cleanly once inside tolerance
+              if (Math.abs(Math.toDegrees(headingError)) <= ANGLE_TOLERANCE_DEGREES) {
+                omega = 0.0;
+              }
+
+              omega =
+                  Math.max(
+                      -MAX_ANGULAR_SPEED_RAD_PER_SEC,
+                      Math.min(MAX_ANGULAR_SPEED_RAD_PER_SEC, omega));
+
+              // Rotation only: vx = vy = 0
+              drivebase.drive(new ChassisSpeeds(0, 0, omega));
+
+              SmartDashboard.putNumber("Vision/ParallelAlign/TargetDeg", target.get().getDegrees());
+              SmartDashboard.putNumber(
+                  "Vision/ParallelAlign/ErrorDeg", Math.toDegrees(headingError));
+            },
+            this,
+            drivebase) // require drivebase so the default drive command doesn't fight it
+        .finallyDo(interrupted -> drivebase.drive(new ChassisSpeeds(0, 0, 0)));
   }
 }

@@ -147,6 +147,8 @@ public class RobotContainer {
                 () -> driverXbox.getLeftY() * MAX_LINEAR_SPEED_MPS,
                 () -> driverXbox.getLeftX() * MAX_LINEAR_SPEED_MPS));
 
+    driverXbox.y().whileTrue(vision.alignParallelToTags());
+
     driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
     // OUTREACH
