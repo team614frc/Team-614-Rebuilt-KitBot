@@ -477,7 +477,7 @@ public class VisionSubsystem extends SubsystemBase {
   }
 
   private static final int[] PARALELL_TAG_IDS = {4, 5};
-  private static final double PARALLEL_ALIGN_OFFSET_DEG = 0.0;
+  private static final double PARALLEL_ALIGN_OFFSET_DEG = 180;
 
   public Optional<Rotation2d> getParallelToTagsHeading() {
     if (fieldLayout == null) return Optional.empty();
